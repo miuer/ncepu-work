@@ -1,6 +1,6 @@
 /*
  * Revision History:
- *     Initial: 2019/11/05      Miuer
+ *     Initial:                 2019/11/05      Miuer
  *     Test environment:        Swi-prolog 7.6.4
  */
 
