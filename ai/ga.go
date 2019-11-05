@@ -1,8 +1,8 @@
 /*
  * Revision History:
- *     Initial:					2019/11/05		Miuer
- *	   Last modify:             2019/11/05		Miuer
- *     Test environment:		go1.13.3
+ *    Initial:                 2019/11/05    Miuer
+ *    Last modify:             2019/11/05    Miuer
+ *    Test environment:        go1.13.3
  */
 
 package main
