@@ -37,7 +37,7 @@ func main() {
 	var count = 2
 	for {
 		if len(optimal) < 20 {
-			next := selection(fitness(initial(parent)))
+			next := mutation(selection(fitness(initial(parent))))
 			optimal = append(optimal, next...)
 			fmt.Printf("The %d generation: ", count)
 			fmt.Println(optimal)
@@ -118,13 +118,14 @@ func mutation(data []float64) []float64 {
 	seed()
 	mut := rand.Intn(3)
 
-	if mut > 0 {
-		seed()
-		for i := 0; i < mut; i++ {
-			num := rand.Intn(5)
-			data[num] = round(rand.Float64())
+	if mut < len(data) {
+		if mut > 0 {
+			seed()
+			for i := 0; i < mut; i++ {
+				num := rand.Intn(len(data))
+				data[num] = round(rand.Float64())
+			}
 		}
 	}
-
 	return data
 }
