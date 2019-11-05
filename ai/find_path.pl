@@ -1,7 +1,7 @@
 /*
  * Revision History:
- *     Initial: 2019/11/05       Miuer
- *     Test environment:         Swi-prolog 7.6.4
+ *     Initial: 2019/11/05      Miuer
+ *     Test environment:        Swi-prolog 7.6.4
  */
 
 % You can customize the directed graph.
