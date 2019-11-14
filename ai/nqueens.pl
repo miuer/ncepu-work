@@ -3,6 +3,7 @@
  *    From:                 http://aodi.blog.sohu.com/245588871.html
  *    Test environment:        Swi-prolog 7.6.4
  */
+ 
 queens(N,Qs):-
         range(1,N,Ns),
         queens(Ns,[],Qs).
