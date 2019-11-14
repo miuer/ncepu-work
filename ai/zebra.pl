@@ -55,7 +55,7 @@ X=[h(C1,N1,P1,Y1,D1),h(C2,N2,P2,Y2,D2),h(C3,N3,P3,Y3,D3),h(C4,N4,P4,Y4,D4),h(C5,
     color(Z4,yellow),
 
     member(Z5,X),
-    pet(Z5,fox),%交叉处用变量A……I表示
+    pet(Z5,fox),
     next(Z6,Z5,X),
     yan(Z6,chesterfields),    
 
