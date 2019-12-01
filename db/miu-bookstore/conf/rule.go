@@ -1,18 +1,20 @@
 package conf
 
 type ConfEngine struct {
+	Engine       []string
 	Rule         map[string]map[string]interface{}
 	IgnoreDomain map[string]int
 }
 
-var RuleConfig *ConfEngine
+var EngineConf *ConfEngine
 
 func InitConfig() {
 
-	RuleConfig = &ConfEngine{}
+	EngineConf = &ConfEngine{}
+	EngineConf.Engine = []string{"bidu"}
 
 	// link_prefix -1 代表取chapter_url 1 代表直接取URL 0 代表使用域名加拼接
-	RuleConfig.Rule = map[string]map[string]interface{}{
+	EngineConf.Rule = map[string]map[string]interface{}{
 		"www.biquge.info":          {"link_prefix": "-1", "chapter_selector": "#list", "content_selector": "#content"},
 		"www.biqugetv.com":         {"link_prefix": "0", "chapter_selector": "#list", "content_selector": "#content"},
 		"www.paoshu8.com":          {"link_prefix": "0", "chapter_selector": "#list", "content_selector": "#content"},
@@ -248,7 +250,7 @@ func InitConfig() {
 		"www.siluke.tw":            {"link_prefix": "0", "chapter_selector": "#list", "content_selector": "#content"},
 	}
 
-	RuleConfig.IgnoreDomain = map[string]int{
+	EngineConf.IgnoreDomain = map[string]int{
 		"www.17k.com": 1, "mm.17k.com": 1, "www.xs8.cn": 1, "www.zongheng.com": 1, "yunqi.qq.com": 1, "chuangshi.qq.com": 1,
 		"book.qidian.com": 1, "www.soduso.com": 1, "pages.book.qq.com": 1, "book.km.com": 1, "www.lread.net": 1,
 		"www.0dsw.com": 1, "www.5200xsb.com": 1, "www.80txt.com": 1, "www.sodu.tw": 1, "www.shuquge.com": 1,

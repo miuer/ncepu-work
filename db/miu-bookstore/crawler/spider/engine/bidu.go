@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"sync"
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
@@ -27,9 +28,8 @@ func NewBiduSearchEngine(parseResultFunc func(searchResult *model.SearchResult))
 	}
 }
 
-func (bidu *biduSearchEngine) EngineRun(novelName string) {
-	done := make(chan struct{})
-	defer close(done)
+func (bidu *biduSearchEngine) EngineRun(novelName string, group *sync.WaitGroup) {
+	defer group.Done()
 
 	searchKey := url.QueryEscape(fmt.Sprintf(bidu.searchRule, novelName))
 	requestURL := fmt.Sprintf(bidu.domain, searchKey)
@@ -39,7 +39,8 @@ func (bidu *biduSearchEngine) EngineRun(novelName string) {
 	extensions.Referer(c)
 
 	c.OnHTML(bidu.parseRule, func(element *colly.HTMLElement) {
-		go bidu.extractData(element, done)
+		group.Add(1)
+		go bidu.extractData(element, group)
 	})
 
 	err := c.Visit(requestURL)
@@ -49,7 +50,9 @@ func (bidu *biduSearchEngine) EngineRun(novelName string) {
 
 }
 
-func (bidu *biduSearchEngine) extractData(element *colly.HTMLElement, done <-chan struct{}) {
+func (bidu *biduSearchEngine) extractData(element *colly.HTMLElement, group *sync.WaitGroup) {
+	defer group.Done()
+
 	href := element.Attr("href")
 	title := element.Text
 
@@ -65,7 +68,7 @@ func (bidu *biduSearchEngine) extractData(element *colly.HTMLElement, done <-cha
 		}
 
 		host := resp.Request.URL.Host
-		_, ok := conf.RuleConfig.IgnoreDomain[host]
+		_, ok := conf.EngineConf.IgnoreDomain[host]
 		if ok {
 			return
 		}
