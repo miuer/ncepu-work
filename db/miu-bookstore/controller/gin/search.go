@@ -1,6 +1,7 @@
 package gin
 
 import (
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -20,14 +21,14 @@ func novelSearch(ctx *gin.Context) {
 	}
 
 	start := time.Now().UnixNano()
-	result := startSearch(wd)
+	results := startSearch(wd)
 	end := time.Now().UnixNano()
 
 	searchTime := end - start
-	searchCount := len(result)
+	searchCount := len(results)
 
 	ctx.HTML(http.StatusOK, "search_index.html", gin.H{
-		"list":        result,
+		"list":        results,
 		"novelName":   wd,
 		"elapsedTime": searchTime,
 		"count":       searchCount,
@@ -52,13 +53,16 @@ func startSearch(novelName string) []*model.SearchResult {
 		}
 
 		if searchEngine != nil {
-			go searchEngine.EngineRun(novelName, group)
+			go searchEngine.EngineRun(novelName, &group)
 		}
 	}
 
 	group.Wait()
 
 	// ---------------- store in redis
+
+	log.Println(results)
+
 	return results
 
 }
