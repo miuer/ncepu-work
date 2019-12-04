@@ -25,15 +25,11 @@
                         <div class="netloc">
                             <i>{{ .Host }}</i>
                             <i><a target="_blank" href="{{ .Href }}">查看源网址</a></i>
-                         
-                        
                             {{ if .IsParse }}
                                 <span class="label label-primary parse-label">已解析</span>
                             {{ else }}
                                 <span class="label label-danger parse-label">未解析</span>
                             {{ end }}
-                        
-
                         </div>
                         <div class="tags">
 

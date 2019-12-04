@@ -2,7 +2,6 @@ package engine
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"strings"
 	"sync"
@@ -22,9 +21,9 @@ type biduSearchEngine struct {
 
 func NewBiduSearchEngine(parseResultFunc func(searchResult *model.SearchResult)) *biduSearchEngine {
 	return &biduSearchEngine{
-		parseRule:       "#content_left h3 .t a",
+		parseRule:       "#content_left h3.t a",
 		searchRule:      "intitle:%s 阅读 小说",
-		domain:          "https://www.baidu.com/s?wd=%s&ie=utf-8&rn=15&vf_bl=1",
+		domain:          "https://www.baidu.com/ie=utf-8&wd=%s",
 		parseResultFunc: parseResultFunc,
 	}
 }
@@ -35,16 +34,12 @@ func (bidu *biduSearchEngine) EngineRun(novelName string, group *sync.WaitGroup)
 	searchKey := url.QueryEscape(fmt.Sprintf(bidu.searchRule, novelName))
 	requestURL := fmt.Sprintf(bidu.domain, searchKey)
 
-	log.Println(requestURL)
-
 	c := colly.NewCollector()
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 
 	c.OnHTML(bidu.parseRule, func(element *colly.HTMLElement) {
-
 		group.Add(1)
-		log.Println("123456")
 		go bidu.extractData(element, group)
 	})
 
@@ -73,14 +68,12 @@ func (bidu *biduSearchEngine) extractData(element *colly.HTMLElement, group *syn
 		}
 
 		host := resp.Request.URL.Host
-
 		_, ok := conf.EngineConf.IgnoreDomain[host]
 		if ok {
 			return
 		}
 
 		result := &model.SearchResult{Title: title, Href: realURL, Host: host}
-
 		bidu.parseResultFunc(result)
 
 	})
