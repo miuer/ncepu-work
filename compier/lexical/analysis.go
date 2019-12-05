@@ -5,7 +5,8 @@ import (
 	"io/ioutil"
 )
 
-var as analysis
+// As -
+var As analysis
 
 func (as *analysis) Analysis(filename string) {
 	srcCode, err := ioutil.ReadFile(filename)
@@ -14,14 +15,25 @@ func (as *analysis) Analysis(filename string) {
 	}
 	as.src = append(srcCode, '#')
 	as.currentRow = 1
+	initMachineCode()
+
 	as.StartLexicalAnalysis()
+
+	/*
+		for i := 0; i < len(as.tokens); i++ {
+			fmt.Println(as.tokens[i].ID, string(as.tokens[i].Name), as.tokens[i].MachineCode, as.tokens[i].Addr)
+		}
+
+		for i := 0; i < len(as.symbles); i++ {
+			fmt.Println(as.symbles[i].ID, string(as.symbles[i].Name), as.symbles[i].Type)
+		}
+	*/
 }
 
 func (as *analysis) StartLexicalAnalysis() {
 	for true {
-
 		if !isValid(as.src[as.forward]) {
-			fmt.Printf("syntax error: unexpected literal %s, expecting name", string(as.src[as.forward]))
+			fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
 			as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
 			continue
 		} else if as.src[as.forward] == ' ' {
@@ -52,40 +64,92 @@ func (as *analysis) StartLexicalAnalysis() {
 }
 
 func (as *analysis) scanToLetter() {
-	as.lexemeBegin = as.forward
-}
-
-func (as *analysis) scanToDigit() {
-	as.lexemeBegin = as.forward
-}
-
-func (as *analysis) scanToSymbol() {
-	as.lexemeBegin = as.forward
 	as.forward++
-	if as.src[as.lexemeBegin] == ':' && as.src[as.forward] == '=' {
-		name := as.src[as.lexemeBegin : as.forward+1]
-		as.setToken(name)
-		as.forward++
-		return
-	} else if as.src[as.lexemeBegin] == '>' && as.src[as.forward] == '=' {
-		name := as.src[as.lexemeBegin : as.forward+1]
-		as.setToken(name)
-		as.forward++
-		return
-	} else if as.src[as.lexemeBegin] == '<' && as.src[as.forward] == '=' {
-		name := as.src[as.lexemeBegin : as.forward+1]
-		as.setToken(name)
-		as.forward++
-		return
-	} else if as.src[as.forward] == '>' {
-		name := as.src[as.lexemeBegin : as.forward+1]
-		as.setToken(name)
-		as.forward++
-		return
+
+	if !isValid(as.src[as.forward]) {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToLetter()
+	} else if isLetter(as.src[as.forward]) || isDigit(as.src[as.forward]) {
+		as.scanToLetter()
 	} else {
 		name := as.src[as.lexemeBegin:as.forward]
 		as.setToken(name)
+		as.lexemeBegin = as.forward
+	}
+}
+
+func (as *analysis) scanToDigit() {
+	as.forward++
+
+	if !isValid(as.src[as.forward]) {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToDigit()
+	} else if isDigit(as.src[as.forward]) {
+		as.scanToDigit()
+	} else if as.src[as.forward] == '.' {
+		as.scanToFloat()
+	} else {
+		name := as.src[as.lexemeBegin:as.forward]
+		as.setToken(name)
+		as.lexemeBegin = as.forward
+	}
+}
+
+func (as *analysis) scanToFloat() {
+	as.forward++
+	if !isValid(as.src[as.forward]) {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToFloat()
+	} else if isDigit(as.src[as.forward]) {
+		as.scanToFloat()
+	} else if as.src[as.forward] == '.' {
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToFloat()
+	} else {
+		name := as.src[as.lexemeBegin:as.forward]
+		as.setToken(name)
+		as.lexemeBegin = as.forward
+	}
+}
+
+// --- 似乎无法修复操作符后跟着无效字符的错误
+func (as *analysis) scanToSymbol() {
+	if !isValid(as.src[as.forward]) {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToSymbol()
+	} else if as.src[as.forward] == ':' && as.src[as.forward+1] == '=' {
+		name := as.src[as.lexemeBegin : as.forward+2]
+		as.setToken(name)
+		as.forward += 2
+		as.lexemeBegin = as.forward
+		return
+	} else if as.src[as.forward] == '>' && as.src[as.forward+1] == '=' {
+		name := as.src[as.lexemeBegin : as.forward+2]
+		as.setToken(name)
+		as.forward += 2
+		as.lexemeBegin = as.forward
+		return
+	} else if as.src[as.forward] == '<' && as.src[as.forward+1] == '=' {
+		name := as.src[as.lexemeBegin : as.forward+2]
+		as.setToken(name)
+		as.forward += 2
+		as.lexemeBegin = as.forward
+		return
+	} else if as.src[as.forward] == '<' && as.src[as.forward+1] == '>' {
+		name := as.src[as.lexemeBegin : as.forward+2]
+		as.setToken(name)
+		as.forward += 2
+		as.lexemeBegin = as.forward
+		return
+	} else {
+		name := as.src[as.lexemeBegin : as.forward+1]
+		as.setToken(name)
 		as.forward++
+		as.lexemeBegin = as.forward
 	}
 }
 
@@ -104,7 +168,7 @@ func (as *analysis) setToken(name []byte) {
 }
 
 func (as *analysis) setSymbol(name []byte, mc int) int {
-	if mc < 18 && mc > 20 {
+	if mc < 18 || mc > 20 {
 		return -1
 	}
 
@@ -122,5 +186,5 @@ func (as *analysis) setSymbol(name []byte, mc int) int {
 	}
 
 	as.symbles = append(as.symbles, symble)
-	return len(as.symbles) - 1
+	return len(as.symbles)
 }

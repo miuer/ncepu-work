@@ -23,6 +23,15 @@ func isLetter(char byte) bool {
 	return matched
 }
 
+func isKeyWord(name []byte) bool {
+	_, ok := MachineMap[string(name)]
+	if ok {
+		return true
+	}
+
+	return false
+}
+
 func isSymbol(char byte) bool {
 	matched, _ := regexp.MatchString(`:|>|<`, string(char))
 	return matched

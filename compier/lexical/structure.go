@@ -3,8 +3,8 @@ package lexical
 // MachineMap -
 var MachineMap map[string]int
 
-func init() {
-	MachineMap := make(map[string]int, 38)
+func initMachineCode() {
+	MachineMap = make(map[string]int, 38)
 
 	MachineMap["and"] = 1
 	MachineMap["begin"] = 2
