@@ -115,7 +115,7 @@ func (as *analysis) scanToFloat() {
 	}
 }
 
-// --- 似乎无法修复操作符后跟着无效字符的错误
+// ---
 func (as *analysis) scanToSymbol() {
 	if !isValid(as.src[as.forward]) {
 		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
