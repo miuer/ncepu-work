@@ -2,13 +2,15 @@ package lexical
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
+	"os"
 )
 
 // As -
 var As analysis
 
-func (as *analysis) Analysis(filename string) {
+func (as *analysis) Analysis(filename, tokenName, symbleName string) {
 	srcCode, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(fmt.Sprintf("file %s could not be found.", filename))
@@ -17,9 +19,11 @@ func (as *analysis) Analysis(filename string) {
 	as.currentRow = 1
 	initMachineCode()
 
-	as.StartLexicalAnalysis()
-
+	as.startLexicalAnalysis()
+	as.writeTokensToFile(tokenName)
+	as.writeSymblesToFile(symbleName)
 	/*
+		// --- You can view the results of the lexical analysis by uncommenting
 		for i := 0; i < len(as.tokens); i++ {
 			fmt.Println(as.tokens[i].ID, string(as.tokens[i].Name), as.tokens[i].MachineCode, as.tokens[i].Addr)
 		}
@@ -28,9 +32,10 @@ func (as *analysis) Analysis(filename string) {
 			fmt.Println(as.symbles[i].ID, string(as.symbles[i].Name), as.symbles[i].Type)
 		}
 	*/
+
 }
 
-func (as *analysis) StartLexicalAnalysis() {
+func (as *analysis) startLexicalAnalysis() {
 	for true {
 		if !isValid(as.src[as.forward]) {
 			fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
@@ -115,7 +120,6 @@ func (as *analysis) scanToFloat() {
 	}
 }
 
-// ---
 func (as *analysis) scanToSymbol() {
 	if !isValid(as.src[as.forward]) {
 		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
@@ -187,4 +191,36 @@ func (as *analysis) setSymbol(name []byte, mc int) int {
 
 	as.symbles = append(as.symbles, symble)
 	return len(as.symbles)
+}
+
+func (as *analysis) writeTokensToFile(filename string) {
+	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+
+	for i := 0; i < len(as.tokens); i++ {
+		content := fmt.Sprintf("%d %s %d %d\n", as.tokens[i].ID, string(as.tokens[i].Name), as.tokens[i].MachineCode, as.tokens[i].Addr)
+		_, err := io.WriteString(f, content)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+
+func (as *analysis) writeSymblesToFile(filename string) {
+	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+
+	for i := 0; i < len(as.symbles); i++ {
+		content := fmt.Sprintf("%d %s %d\n", as.symbles[i].ID, string(as.symbles[i].Name), as.symbles[i].Type)
+		_, err := io.WriteString(f, content)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }

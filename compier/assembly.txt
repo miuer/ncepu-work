@@ -1,0 +1,24 @@
+(i*(i+i)-i/(i+i))#
+Yes
+
+(+,i,i,t1)
+(*,i,t1,t2)
+(+,i,i,t3)
+(/,i,t3,t4)
+(-,t2,t4,t5)
+
+mov eax,i
+add eax,i
+mov t1, eax
+mov eax,i
+mul eax,t1
+mov t2, eax
+mov eax,i
+add eax,i
+mov t3, eax
+mov eax,i
+div eax,t3
+mov t4, eax
+mov eax,t2
+sub eax,t4
+mov t5, eax

@@ -1,0 +1,13 @@
+FOLLOW())={ }
+FOLLOW(E)={ ) # }
+FOLLOW(-)={ }
+FOLLOW(*)={ }
+FOLLOW(@)={ }
+FOLLOW(F)={ - # ) * / + }
+FOLLOW(S)={ ) + - # }
+FOLLOW(/)={ }
+FOLLOW(()={ }
+FOLLOW(+)={ }
+FOLLOW(T)={ # ) + - }
+FOLLOW(G)={ ) # }
+FOLLOW(i)={ }
