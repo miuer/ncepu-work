@@ -52,7 +52,7 @@ func startSearch(novelName string) []*model.SearchResult {
 		}
 
 		if searchEngine != nil {
-			go searchEngine.EngineRun(novelName, group)
+			go searchEngine.EngineRun(novelName, &group)
 		}
 	}
 
