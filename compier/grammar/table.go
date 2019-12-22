@@ -24,7 +24,7 @@ func getChartFrom(fis firstSet, fos followSet, rus rules) chart {
 					if t := rus.getTheFirstItem(NT, T); t != "" {
 						ch[NT][T] = string(NT) + "->" + t
 
-						// 首字符是非终结符
+						// 如果 first 与输入串匹配，添加到预测分析表中
 					} else if rus.Dfs(NT, T) {
 						ch[NT][T] = string(NT) + "->" + rule[i]
 					}

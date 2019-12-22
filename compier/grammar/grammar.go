@@ -38,7 +38,7 @@ func Analysis() {
 
 	step, err := analyze(ch, start, string(input))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Illegal input string")
 		return
 	}
 

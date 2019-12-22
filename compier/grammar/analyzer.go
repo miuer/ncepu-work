@@ -52,6 +52,7 @@ func analyze(ch chart, start byte, input string) ([]*item, error) {
 			if t, ok := ch[tos][current]; ok {
 				index := bytes.LastIndexByte([]byte(t), '>')
 				if t[len(t)-1] != '@' {
+					// 将产生式后面的串倒叙入栈
 					for i := len(t) - 1; i > index; i-- {
 						stack = append(stack, t[i])
 					}
