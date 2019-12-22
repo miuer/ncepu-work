@@ -1,6 +1,20 @@
 {
     "files.associations": {
         "ostream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "iosfwd": "cpp",
+        "memory": "cpp",
+        "__locale": "cpp",
+        "__string": "cpp",
+        "bitset": "cpp",
+        "complex": "cpp",
+        "iterator": "cpp",
+        "ios": "cpp",
+        "istream": "cpp",
+        "locale": "cpp",
+        "sstream": "cpp",
+        "streambuf": "cpp",
+        "string_view": "cpp",
+        "utility": "cpp"
     }
 }

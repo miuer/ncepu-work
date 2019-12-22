@@ -91,6 +91,10 @@ func (as *analysis) scanToDigit() {
 		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
 		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
 		as.scanToDigit()
+	} else if isLetter(as.src[as.forward]) {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToDigit()
 	} else if isDigit(as.src[as.forward]) {
 		as.scanToDigit()
 	} else if as.src[as.forward] == '.' {
@@ -108,9 +112,14 @@ func (as *analysis) scanToFloat() {
 		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
 		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
 		as.scanToFloat()
+	} else if isLetter(as.src[as.forward]) {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
+		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
+		as.scanToFloat()
 	} else if isDigit(as.src[as.forward]) {
 		as.scanToFloat()
 	} else if as.src[as.forward] == '.' {
+		fmt.Printf("syntax error: unexpected literal %s at %d\n", string(as.src[as.forward]), as.currentRow)
 		as.src = append(as.src[:as.forward], as.src[as.forward+1:]...)
 		as.scanToFloat()
 	} else {

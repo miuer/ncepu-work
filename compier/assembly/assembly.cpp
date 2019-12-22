@@ -11,6 +11,31 @@
 
 using namespace std;
 
+
+
+/*
+
+E->TG
+G->+TG|-TG|ε
+T->FS
+S->*FS|/FS|ε
+F->(E)|i
+
+文法调整
+
+E -> T A
+A -> + T GEQ(+) A
+A -> - T GEQ(-) A
+A -> ε
+T -> FB
+B -> * F GEQ(*) B
+B -> / F GEQ(/) B
+B -> ε
+F -> I PUSH(I)
+F -> (E)
+*/
+
+
 struct Qt //定义四元式结构体
 {
 	string op, a, b, c;
@@ -19,17 +44,17 @@ struct Qt //定义四元式结构体
 string input_str;
 int i = 0, num = 1;
 string ch;
-bool flag = 0; //flag=1表示当前算数表达式串无法识别
+bool flag = 0; // flag = 1 表示当前算数表达式串无法识别
 vector<pair<string, char> > str;
 vector<Qt> ans;
 stack<string> s;
 
-void To_String() //将输入字符串转换为标准的TOKEN串
+void To_String() //将输入字符串转换为TOKEN串
 {
 	int i = 0;
 	while (i < (int)input_str.size())
 	{
-		if (input_str[i] == ' ')
+		if (input_str[i] == ' ') // 空字符跳过，不进行处理
 			i++;
 		else if ((input_str[i] >= 'a' && input_str[i] <= 'z') || (input_str[i] >= 'A' && input_str[i] <= 'Z') || (input_str[i] >= '0' && input_str[i] <= '9')) //当前是字符或者数字
 		{
@@ -43,7 +68,7 @@ void To_String() //将输入字符串转换为标准的TOKEN串
 			}
 			str.push_back(make_pair(tmp, 'I'));
 		}
-		else //其他情况，直接将字符放入
+		else //其他情况（单运算符），直接将字符放入
 		{
 			string tmp;
 			tmp.push_back(input_str[i]);
@@ -112,8 +137,10 @@ int main() //LL(1)方法
 			string tmp1;
 			tmp1.push_back(str[i].second);
 
+			// 迭代出口
 			if (ch == "#")
 			{
+				// 输入串含有不合法字符 '#'，
 				if (str[i].second == '#')
 				{
 					s.pop();
@@ -232,6 +259,8 @@ int main() //LL(1)方法
 			else if (ch[0] == 'G') //生成四元式操作
 			{
 				string tmp;
+
+				// Ascll 1 ---49
 				tmp.push_back('t');
 				tmp.push_back(48 + num);
 				//cout << tmp <<endl;
