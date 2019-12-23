@@ -1,5 +1,5 @@
-FIRST(T)={ ( i }
-FIRST(S)={ * / @ }
-FIRST(F)={ ( i }
 FIRST(E)={ ( i }
-FIRST(G)={ + - @ }
+FIRST(G)={ @ + - }
+FIRST(T)={ i ( }
+FIRST(S)={ @ * / }
+FIRST(F)={ ( i }
