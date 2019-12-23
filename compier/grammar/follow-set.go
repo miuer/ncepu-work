@@ -22,26 +22,20 @@ func getFollowFrom(r rules, start byte, fis firstSet) followSet {
 		for k, v := range r {
 			for _, val := range v {
 				for i := 0; i < len(val)-1; i++ {
-
+					// A -> aBb
 					if fos[val[i]] == nil {
 						fos[val[i]] = make(map[byte]struct{})
 					}
-
-					// A -> Bb | BC  终结符会直接跳过，一直到非终结符
 					if !isTerminal(val[i]) {
-						// 如果非终结符后面是终结符，将终结符放进非终结符的 follow
 						if isTerminal(val[i+1]) {
 							if mergeFollowSet(fos[val[i]], map[byte]struct{}{val[i+1]: {}}) != 0 {
 								changed = true
 							}
-
-							// 如果非终结符后面是非终结符，将第二个非终结符的 first 放进第一个非终结符的 follow
 						} else {
 							if removeEmptyAndmergeFollowSet(fos[val[i]], fis[val[i+1]]) != 0 {
 								changed = true
 							}
 						}
-						// 如果非终结符后面是非终结符，第二个非终结符的 first 中含有空串，则将第前置的 follow 加入非终结符
 						if fis.haveEmpty(val[i+1]) {
 							if mergeFollowSet(fos[val[i]], fos[k]) != 0 {
 								changed = true
@@ -50,12 +44,10 @@ func getFollowFrom(r rules, start byte, fis firstSet) followSet {
 					}
 				}
 
-				// A -> a 单字符（终结符）处理情况
+				// A -> aB
 				if fos[val[len(val)-1]] == nil {
 					fos[val[len(val)-1]] = make(map[byte]struct{})
 				}
-
-				// A -> B 单字符（终结符）处理情况
 				if !isTerminal(val[len(val)-1]) {
 					if mergeFollowSet(fos[val[len(val)-1]], fos[k]) != 0 {
 						changed = true

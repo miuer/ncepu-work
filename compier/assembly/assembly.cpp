@@ -11,6 +11,8 @@
 
 using namespace std;
 
+
+
 /*
 
 E->TG
@@ -22,16 +24,15 @@ F->(E)|i
 文法调整
 
 E -> T A
-A -> + T GEN(+) A
-A -> - T GEN(-) A
+A -> + T GEQ(+) A
+A -> - T GEQ(-) A
 A -> ε
 T -> FB
-B -> * F GEN(*) B
-B -> / F GEN(/) B
+B -> * F GEQ(*) B
+B -> / F GEQ(/) B
 B -> ε
 F -> I PUSH(I)
 F -> (E)
-
 */
 
 
@@ -108,7 +109,7 @@ void target(Qt qt)
 int main() //LL(1)方法
 {
 	In();
-	Out();
+	Out(); //文件读写操作
 	input_str.clear();
 
 	while (getline(cin, input_str))
@@ -161,7 +162,7 @@ int main() //LL(1)方法
 					s.pop();
 					s.push("A");
 					s.push("T");
-				} //将 1 号产生式逆序压栈
+				} //将1号产生式逆序压栈
 				else
 					break;
 			}
@@ -171,22 +172,22 @@ int main() //LL(1)方法
 				{
 					s.pop();
 					s.push("A");
-					s.push("GEN(+)");
+					s.push("GEQ(+)");
 					s.push("T");
 					s.push("+");
-				} //将 2 号产生式逆序压栈
+				} //将2号产生式逆序压栈
 				else if (str[i].second == '-')
 				{
 					s.pop();
 					s.push("A");
-					s.push("GEN(-)");
+					s.push("GEQ(-)");
 					s.push("T");
 					s.push("-");
-				} //将 3 号产生式逆序压栈
+				} //3号产生式
 				else if (str[i].second == ')' || str[i].second == '#')
 				{
 					s.pop();
-				} //将 4 号产生式逆序压栈，空串只进行弹栈
+				} //4号产生式
 				else
 					break;
 			}
@@ -197,7 +198,7 @@ int main() //LL(1)方法
 					s.pop();
 					s.push("B");
 					s.push("F");
-				} //将 5 号产生式逆序压栈
+				} //5号产生式
 				else
 					break;
 			}
@@ -207,22 +208,22 @@ int main() //LL(1)方法
 				{
 					s.pop();
 					s.push("B");
-					s.push("GEN(*)");
+					s.push("GEQ(*)");
 					s.push("F");
 					s.push("*");
-				} //将 6 号产生式逆序压栈
+				} //6号产生式
 				else if (str[i].second == '/')
 				{
 					s.pop();
 					s.push("B");
-					s.push("GEN(/)");
+					s.push("GEQ(/)");
 					s.push("F");
 					s.push("/");
-				} //将 7 号产生式逆序压栈
+				} //7号产生式
 				else if (str[i].second == '+' || str[i].second == '-' || str[i].second == ')' || str[i].second == '#')
 				{
 					s.pop();
-				} //将 8 号产生式逆序压栈，空串只进行弹栈
+				} //8号产生式
 				else
 					break;
 			}
@@ -234,14 +235,14 @@ int main() //LL(1)方法
 					s.pop();
 					s.push(tmp);
 					s.push("I");
-				} //将 9 号产生式逆序压栈
+				} //9号产生式
 				else if (str[i].second == '(')
 				{
 					s.pop();
 					s.push(")");
 					s.push("E");
 					s.push("(");
-				} //将 10 号产生式逆序压栈
+				} //10号产生式
 				else
 					break;
 			}
@@ -259,7 +260,7 @@ int main() //LL(1)方法
 			{
 				string tmp;
 
-				// Ascll 1 --- 49
+				// Ascll 1 ---49
 				tmp.push_back('t');
 				tmp.push_back(48 + num);
 				//cout << tmp <<endl;

@@ -3,6 +3,8 @@ package grammar
 import (
 	"fmt"
 	"strings"
+
+	"github.com/Delveshal/compiler-LL1/util"
 )
 
 type rules map[byte][]string
@@ -20,11 +22,11 @@ func (r rules) addRules(str string) error {
 		return fmt.Errorf("the format of input is invalid,expect X->Y but actually %s", str)
 	}
 
+	// 去除多余空格
 	if len(stepOne[0]) != 1 {
 		return fmt.Errorf("input is invalid,expect X on the left but actually %s", stepOne[0])
 	}
 
-	// 去除多余空格
 	stepTwo := strings.Split(strings.Replace(stepOne[1], " ", "", -1), "|")
 	for i := range stepTwo {
 		r[stepOne[0][0]] = append(r[stepOne[0][0]], stepTwo[i])
@@ -42,12 +44,11 @@ func (r rules) getTheFirstItem(first, item byte) string {
 	return ""
 }
 
-// 如果非终结符在输入串中，返回 true
 func (r rules) Dfs(first, terminal byte) bool {
 	for i := range r[first] {
-		if isTerminal(r[first][i][0]) && r[first][i][0] == terminal {
+		if util.IsTerminal(r[first][i][0]) && r[first][i][0] == terminal {
 			return true
-		} else if isTerminal(r[first][i][0]) {
+		} else if !util.IsTerminal(r[first][i][0]) {
 			if ok := r.Dfs(r[first][i][0], terminal); ok {
 				return true
 			}
