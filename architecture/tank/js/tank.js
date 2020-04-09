@@ -540,7 +540,7 @@ var module5 = (function () {
                         case 2:
                             enemyBullets[i] = new Bullet(enemyTanks[i].x + 9, enemyTanks[i].y + 30, enemyTanks[i].direct, 2, "enemy", enemyTanks[i]);
                             break;
-                        case 3: //右
+                        case 3: 
                             enemyBullets[i] = new Bullet(enemyTanks[i].x, enemyTanks[i].y + 9, enemyTanks[i].direct, 2, "enemy", enemyTanks[i]);
                             break;
                     }
@@ -615,11 +615,11 @@ var module7 = {
     },
     drawEnemyBomb: function () {
         for (var i = 0; i < bombs.length; i++) {
-            //取出一颗炸弹
+            // get a bomb
             var bomb = bombs[i];
             if (bomb.isLive) {
-                //更据当前这个炸弹的生命值，来画出不同的炸弹图片
-                if (bomb.blood > 6) {  //显示最大炸弹图
+                //according to the current life value of this bomb, draw different bomb pictures
+                if (bomb.blood > 6) {  
                     var img1 = new Image();
                     img1.src = "./img/bomb_1.gif";
                     var x = bomb.x;
@@ -644,23 +644,23 @@ var module7 = {
                         cxt.drawImage(img3, x, y, 30, 30);
                     }
                 }
-                //减血
+        
+                // remove 
                 bomb.bloodDown();
                 if (bomb.blood <= 0) {
-                    //怎么办?把这个炸弹从数组中去掉
                     bombs.splice(i, 1);
                 }
             }
         }
     },
     isHitEnemyTank: function (wall) {
-        //取出每颗子弹
+        // for range bullets
         for (var i = 0; i < heroBullets.length; i++) {
-            //取出一颗子弹
+            //get a bullet
             var heroBullet = heroBullets[i];
-            /* alert(heroBullet.islive);*/
-            if (heroBullet.isLive === true) { //子弹是活的，才去判断
-                //让这颗子弹去和遍历每个墙判断
+            
+            if (heroBullet.isLive === true) {
+                // bullet and wall
                 for (var i = 0; i < wall.length; i++) {
                     var walls = wall[i];
                     if (walls.isLive == true) {
@@ -671,38 +671,29 @@ var module7 = {
                         }
                     }
                 }
-                //让这颗子弹去和遍历每个敌人坦克判断
+                // bullet and tank
                 for (var j = 0; j < enemyTanks.length; j++) {
                     var enemyTank = enemyTanks[j];
                     if (enemyTank.isLive === true) {
-                        //子弹击中敌人坦克的条件是什么? 很多思路 , 韩老师的思想是
-                        //(看看这颗子弹，是否进入坦克所在矩形)
-                        //根据当时敌人坦克的方向来决定
+                        //
                         switch (enemyTank.direct) {
-                            case 0: //敌人坦克向上
-                            case 2://敌人坦克向下
+                            case 0: //up
+                            case 2://down
                                 if (heroBullet.x >= enemyTank.x && heroBullet.x <= enemyTank.x + 20
                                     && heroBullet.y >= enemyTank.y && heroBullet.y <= enemyTank.y + 30) {
-                                    //把坦克isLive 设为false ,表示死亡
                                     enemyTank.isLive = false;
-                                    //该子弹也死亡
                                     heroBullet.isLive = false;
-                                    //创建一颗炸弹
                                     var bomb = new Bomb(enemyTank.x, enemyTank.y);
-                                    //然后把该炸弹放入到bombs数组中
                                     bombs.push(bomb);
                                 }
                                 break;
-                            case 1: //敌人坦克向右
-                            case 3://敌人坦克向左
+                            case 1: //right
+                            case 3://left
                                 if (heroBullet.x >= enemyTank.x && heroBullet.x <= enemyTank.x + 30
                                     && heroBullet.y >= enemyTank.y && heroBullet.y <= enemyTank.y + 20) {
-                                    //把坦克isLive 设为false ,表示死亡
                                     enemyTank.isLive = false;
                                     heroBullet.isLive = false;
-                                    //创建一颗炸弹
                                     var bomb = new Bomb(enemyTank.x, enemyTank.y);
-                                    //然后把该炸弹放入到bombs数组中
                                     bombs.push(bomb);
                                 }
                                 break;
@@ -711,14 +702,15 @@ var module7 = {
                 }
             }
         }
-    },//判断敌人子弹是否击中英雄坦克
+    },
+    
     isHitHeroTank: function (wall) {
-        //取出每颗子弹
+        //for range bullets
         for (var i = 0; i < enemyTanks.length; i++) {
             var etBullet = enemyBullets[i];
-            //这里，我们加入了一句话，但是要知道这里加，是需要对整个程序有把握
+            // get a bullet
             if (etBullet.isLive == true) {
-                //打到老大
+                // hit god
                 if (god.isLive == true) {
                     if (etBullet.x >= god.x && etBullet.x <= god.x + 40
                         && etBullet.y >= god.y && etBullet.y <= god.y + 40) {
@@ -728,8 +720,7 @@ var module7 = {
                         clearInterval(timer);
                     }
                 }
-                //让这颗子弹去和遍历每个墙判断
-                for (var j = 0; j < wall.length; j++) {//j不能换成i
+                for (var j = 0; j < wall.length; j++) {//j,i not swap
                     var walls = wall[j];
                     if (walls.isLive == true) {
                         if (etBullet.x >= wall[j].x && etBullet.x <= wall[j].x + 40
@@ -741,34 +732,27 @@ var module7 = {
                 }
                 if (hero.isLive == true) {
                     switch (hero.direct) {
-                        case 0: //敌人坦克向上
-                        case 2://敌人坦克向下
+                        case 0: //up
+                        case 2://down
                             if (etBullet.x >= hero.x && etBullet.x <= hero.x + 20
                                 && etBullet.y >= hero.y && etBullet.y <= hero.y + 30) {
-                                //把坦克isLive 设为false ,表示死亡
                                 hero.isLive = false;
-                                //该子弹也死亡
                                 etBullet.isLive = false;
-                                //创建一颗炸弹
                                 var bomb = new Bomb(hero.x, hero.y);
-                                //然后把该炸弹放入到bombs数组中
                                 bombs.push(bomb);
                                 alert("You have lost");
                                 clearInterval(timer);
                             }
                             break;
-                        case 1: //敌人坦克向右
-                        case 3://敌人坦克向左
+                        case 1: // right
+                        case 3:// left
                             if (etBullet.x >= hero.x && etBullet.x <= hero.x + 30
                                 && etBullet.y >= hero.y && etBullet.y <= hero.y + 20) {
-                                //把坦克isLive 设为false ,表示死亡
                                 hero.isLive = false;
                                 etBullet.isLive = false;
                                 alert("You have lost");
                                 clearInterval(timer);
-                                //创建一颗炸弹
                                 var bomb = new Bomb(hero.x, hero.y);
-                                //然后把该炸弹放入到bombs数组中
                                 bombs.push(bomb);
                             }
                             break;
@@ -776,7 +760,7 @@ var module7 = {
                 }
             }
         }
-    }//画出敌人炸弹
+    }
 }
 // module8 -- victory decision
 var module8 = {
