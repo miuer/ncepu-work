@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tank</title>
+    <link rel="stylesheet" type="text/css" href="./css/tank.css">
+    <script type="application/javascript" src="./js/public.js"></script>
+
+</head>
+<body onkeydown="module4.m1()">
+<canvas id="tankMap" width="500px" height="600px" style="background-color:black" ></canvas>
+<canvas id="heroMap2" width="500px" height="600px" style="background-color:transparent" ></canvas>
+<div id="heroMap3"  style="text-align: center" ><h1>Congratulations! You are victorious.</h1></div>
+<div class="show">
+    <span class="heroMove">Move:</span>
+    <table>
+        <tr>
+            <td></td><td>W</td><td></td>
+        </tr>
+        <tr>
+            <td>A</td><td>S</td><td>D</td>
+        </tr>
+    </table>
+    <span class="shoot">Shot：J</span>
+</div>
+
+<button onclick="setReload()">Go!</button>
+<script>
+    function setReload(){
+        window.location.reload();
+    }
+</script>
+<script  src="./js/tank.js"></script>
+</body>
+</html>

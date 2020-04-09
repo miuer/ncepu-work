@@ -1,0 +1,85 @@
+#tankMap{
+    position: absolute;
+    margin-left: 100px;
+    margin-top: 100px;
+}
+#heroMap2
+{
+    position: absolute;
+    margin-left: 100px;
+    margin-top: 100px;
+}
+#heroMap3
+{ position: absolute;
+    margin-left: 100px;
+    margin-top: 300px;
+    width:500px;
+    background-color: #00b0e8;
+    display:none;
+    background-image:linear-gradient(to top left, #fff,#fff,#fff,#fff)
+}
+#heroMap3 h1{
+    height:200px;
+    line-height: 200px;
+    color:darkred;
+    text-shadow: 5px 5px 5px 5px yellow;
+}
+.showAxis span{
+    display: block;
+    float: left;
+    margin-left: 10px;
+    font-weight: bold;
+    background-color: skyblue;
+    height: 50px;
+    line-height:50px;
+}
+.show {
+    background-image: url("../img/background.jpg");
+    background-size: auto;
+    border: 2px silver solid;
+    width: 240px;
+    margin-top: 100px;
+    margin-left: 620px;
+    height: 324px;
+    float: left;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+.heroMove{
+    display: block;
+    color: red;
+    float: left;
+    height: 76px;
+    line-height: 76px;
+    margin-left: 10px;
+}
+.show table{
+    color: red;
+    float: left;
+    margin-left: 20px;
+    font-size: 30px;
+}
+.shoot{
+    display: block;
+    float: left;
+    color: red;
+    margin-left: 10px;
+    margin-top: 100px;
+}
+.expain{
+    display: block;
+    float: left;
+    margin-left: 5px;
+    margin-top: 60px;
+    clear: both;
+    font-style:italic;
+    font-size: 16px;
+}
+button{
+    float: left;
+    margin-top: 520px;
+    margin-left: -200px;
+    font-size: 30px;
+    font-size: 20px;
+}
