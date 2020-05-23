@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+</head>
+
+<body>
+
+    <div>
+
+    {{.Province}}
+    <br>
+    {{.City}}
+    <br>
+    {{.QueryTime}}
+    <br>
+    {{.Metar}}
+    <br>
+    <!--
+        {{.Tip}}
+        <br>
+    -->
+
+    {{range .Forecast}}
+    {{.Date}}
+    {{.Temperature}}
+    {{.Wind}}
+    <br>
+    {{end}}
+
+    <br>
+
+    <a href="http://222.221.83.170:10010/index">返回查询首页</a>
+
+</div>
+</body>
+
+</html>
