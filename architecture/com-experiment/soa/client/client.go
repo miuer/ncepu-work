@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	address = "192.168.1.9:10020"
+	address = "192.168.1.2:10020"
 )
 
 // Run -

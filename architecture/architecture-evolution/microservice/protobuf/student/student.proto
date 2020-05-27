@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message StudentRequest {
+    string id = 1;
+}
+
+message StudentResponse {
+    string sname = 1;
+}
+
+service Student {
+    rpc QueryStudent (StudentRequest) returns (StudentResponse){}
+}

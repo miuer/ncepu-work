@@ -49,36 +49,36 @@ func index(w http.ResponseWriter, r *http.Request) {
 func handler(w http.ResponseWriter, r *http.Request) {
 	location := r.PostFormValue("location")
 
-	XMLweatherinfo := client.Run(location)
+	XMLweatherInfo := client.Run(location)
 
-	weatherinfo := &WeatherInfo{}
+	weatherInfo := &WeatherInfo{}
 
-	xml.Unmarshal([]byte(XMLweatherinfo), weatherinfo)
+	xml.Unmarshal([]byte(XMLweatherInfo), weatherInfo)
 
 	weather := &Weather{
-		Province:  weatherinfo.Information[0],
-		City:      weatherinfo.Information[1],
-		QueryTime: weatherinfo.Information[4],
-		Metar:     weatherinfo.Information[10],
-		Tip:       weatherinfo.Information[11],
+		Province:  weatherInfo.Information[0],
+		City:      weatherInfo.Information[1],
+		QueryTime: weatherInfo.Information[4],
+		Metar:     weatherInfo.Information[10],
+		Tip:       weatherInfo.Information[11],
 	}
 
 	f1 := Forecast{
-		Date:        weatherinfo.Information[6],
-		Temperature: weatherinfo.Information[5],
-		Wind:        weatherinfo.Information[7],
+		Date:        weatherInfo.Information[6],
+		Temperature: weatherInfo.Information[5],
+		Wind:        weatherInfo.Information[7],
 	}
 
 	f2 := Forecast{
-		Date:        weatherinfo.Information[13],
-		Temperature: weatherinfo.Information[12],
-		Wind:        weatherinfo.Information[14],
+		Date:        weatherInfo.Information[13],
+		Temperature: weatherInfo.Information[12],
+		Wind:        weatherInfo.Information[14],
 	}
 
 	f3 := Forecast{
-		Date:        weatherinfo.Information[18],
-		Temperature: weatherinfo.Information[17],
-		Wind:        weatherinfo.Information[19],
+		Date:        weatherInfo.Information[18],
+		Temperature: weatherInfo.Information[17],
+		Wind:        weatherInfo.Information[19],
 	}
 
 	weather.Forecast = append(weather.Forecast, f1, f2, f3)

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message GradeRequest {
+    string id = 1;
+}
+
+message GradeResponse {
+    string grade = 1;
+}
+
+service Grade {
+    rpc QueryGrade (GradeRequest) returns (GradeResponse){}
+}
